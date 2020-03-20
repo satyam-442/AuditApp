@@ -248,6 +248,7 @@ public class Dashboard extends AppCompatActivity
                     int totalBankBalanceInt = ((Integer.valueOf(bankup)) + (Integer.valueOf(googleup)) + (Integer.valueOf(paytmup)) + (Integer.valueOf(phonepeup)) + (Integer.valueOf(savingsup)));
                     totalBankBalanceStr = totalBankBalanceStr + totalBankBalanceInt;
 
+                    //THIS THE LOGIC TO SUM-UP THE TOTAL SAVINGS AMOUNT
                     totalBankBalance.setText(String.valueOf(totalBankBalanceStr));
                 }
             }
