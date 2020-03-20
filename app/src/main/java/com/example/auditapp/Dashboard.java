@@ -65,107 +65,6 @@ public class Dashboard extends AppCompatActivity
 
         SowBalanceInBank();
 
-        /*bank=(TextView)findViewById(R.id.bankref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                    if(dataSnapshot.exists())
-                    {
-                        bankup = dataSnapshot.child("Bank Amount").getValue().toString();
-                        bank.setText(bankup);
-                    }
-                }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Savings Amount").child(refUid);
-
-        savings=(TextView)findViewById(R.id.savingsref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                    if(dataSnapshot.exists())
-                    {
-                        savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
-                        savings.setText(savingsup);
-                    }
-                }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Google Amount").child(refUid);
-        google=(TextView)findViewById(R.id.googleref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
-                    google.setText(googleup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Paytm Amount").child(refUid);
-        paytmre=(TextView)findViewById(R.id.paytmref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
-                    paytmre.setText(paytmup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("PhonePe Amount").child(refUid);
-        phonepe=(TextView)findViewById(R.id.phoneperef);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
-                    phonepe.setText(phonepeup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            {
-            }
-        });*/
-
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
         SetImage=(CircleImageView)findViewById(R.id.main_profile);
@@ -208,9 +107,8 @@ public class Dashboard extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
 
         add=(ImageView)findViewById(R.id.add);
@@ -256,91 +154,6 @@ public class Dashboard extends AppCompatActivity
             public void onCancelled(@NonNull DatabaseError databaseError)
             { }
         });
-
-        /*refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Savings Amount").child(refUid);
-
-        savings=(TextView)findViewById(R.id.savingsref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
-                    savings.setText(savingsup);
-                    totalBankBalance.setText(savingsup);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Google Amount").child(refUid);
-        google=(TextView)findViewById(R.id.googleref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
-                    google.setText(googleup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("Paytm Amount").child(refUid);
-        paytmre=(TextView)findViewById(R.id.paytmref);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
-                    paytmre.setText(paytmup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-
-        refUid=mAuth.getCurrentUser().getUid();
-        reflectref=FirebaseDatabase.getInstance().getReference().child("PhonePe Amount").child(refUid);
-        phonepe=(TextView)findViewById(R.id.phoneperef);
-        reflectref.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
-                    phonepe.setText(phonepeup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            {
-            }
-        });*/
 
         //totalBankBalanceStr = googleup + paytmup + phonepeup + savingsup + bankup;
 
