@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,188 +27,166 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Dashboard extends AppCompatActivity {
-
+public class Dashboard extends AppCompatActivity
+{
     Dialog dialogframe;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mUserDatabase,reflectref;
+    private DatabaseReference mUserDatabase,reflectref, mSavingAccountRef;
     private CircleImageView SetImage;
     private ImageView add,closeimg,paypal,paytm,visa,phonepay,gpay,sub;
-    private TextView google,paytmre,phonepe,savings,bank;
+    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance;
     private ProgressDialog loadingBar;
     private FirebaseUser mCurrentUser;
-    private  String refUid;
+    private String refUid, googleup, bankup, savingsup, phonepeup, paytmup;
+    int totalBankBalanceStr = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
         dialogframe=new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
 
-        refUid=mAuth.getCurrentUser().getUid();
+        refUid = mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("Bank Amount").child(refUid);
 
-        bank=(TextView)findViewById(R.id.bankref);
-        reflectref.addValueEventListener(new ValueEventListener() {
+        mSavingAccountRef = FirebaseDatabase.getInstance().getReference().child("MySavings").child(refUid);
+
+        bank = (TextView) findViewById(R.id.bankref);
+        savings = (TextView) findViewById(R.id.savingsref);
+        phonepe = (TextView) findViewById(R.id.phoneperef);
+        paytmre = (TextView) findViewById(R.id.paytmref);
+        google = (TextView) findViewById(R.id.googleref);
+
+        totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
+
+        SowBalanceInBank();
+
+        /*bank=(TextView)findViewById(R.id.bankref);
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                    if(dataSnapshot.exists()) {
-                        String bankup = dataSnapshot.child("Bank Amount").getValue().toString();
-
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                    if(dataSnapshot.exists())
+                    {
+                        bankup = dataSnapshot.child("Bank Amount").getValue().toString();
                         bank.setText(bankup);
                     }
-
                 }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
 
         refUid=mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("Savings Amount").child(refUid);
 
         savings=(TextView)findViewById(R.id.savingsref);
-
-        reflectref.addValueEventListener(new ValueEventListener() {
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    if(dataSnapshot.exists()) {
-                        String savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
-
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                    if(dataSnapshot.exists())
+                    {
+                        savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
                         savings.setText(savingsup);
                     }
-
-
-
-
                 }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
-
 
 
         refUid=mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("Google Amount").child(refUid);
-
         google=(TextView)findViewById(R.id.googleref);
-
-        reflectref.addValueEventListener(new ValueEventListener() {
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    String googleup = dataSnapshot.child("Google Amount").getValue().toString();
-
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
                     google.setText(googleup);
                 }
-
-
-
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
-
 
 
         refUid=mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("Paytm Amount").child(refUid);
-
         paytmre=(TextView)findViewById(R.id.paytmref);
-
-        reflectref.addValueEventListener(new ValueEventListener() {
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    String paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
-
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
                     paytmre.setText(paytmup);
                 }
-
-
-
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
 
 
         refUid=mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("PhonePe Amount").child(refUid);
-
         phonepe=(TextView)findViewById(R.id.phoneperef);
-
-        reflectref.addValueEventListener(new ValueEventListener() {
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    String phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
-
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
                     phonepe.setText(phonepeup);
                 }
-
-
-
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
             }
-        });
-
-
+        });*/
 
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
         SetImage=(CircleImageView)findViewById(R.id.main_profile);
 
-
-
-
-
         sub=(ImageView)findViewById(R.id.sub);
-        sub.setOnClickListener(new View.OnClickListener() {
+        sub.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent intent=new Intent(Dashboard.this,ExpenseActivity.class);
                 startActivity(intent);
             }
         });
 
-
-        mUserDatabase.addValueEventListener(new ValueEventListener() {
+        mUserDatabase.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final String image = dataSnapshot.child("image").getValue().toString();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                /*final String image = dataSnapshot.child("image").getValue().toString();
                 if(!image.equals("default"))
                 {
                     Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
@@ -225,7 +204,7 @@ public class Dashboard extends AppCompatActivity {
                             Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
                         }
                     });
-                }
+                }*/
             }
 
             @Override
@@ -234,100 +213,204 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-
-
         add=(ImageView)findViewById(R.id.add);
-
-        add.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                showpay();
-
             }
+        });
+    }
+
+    private void SowBalanceInBank() {
+        //bank=(TextView)findViewById(R.id.bankref);
+        mSavingAccountRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    bankup = dataSnapshot.child("Bank Amount").getValue().toString();
+                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
+                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
+                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
+                    savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
+                    bank.setText(bankup);
+                    google.setText(googleup);
+                    paytmre.setText(paytmup);
+                    phonepe.setText(phonepeup);
+                    savings.setText(savingsup);
+
+                    //totalBankBalanceStr = bankup + googleup + paytmup + phonepeup + savingsup;
+                    int totalBankBalanceInt = ((Integer.valueOf(bankup)) + (Integer.valueOf(googleup)) + (Integer.valueOf(paytmup)) + (Integer.valueOf(phonepeup)) + (Integer.valueOf(savingsup)));
+                    totalBankBalanceStr = totalBankBalanceStr + totalBankBalanceInt;
+
+                    totalBankBalance.setText(String.valueOf(totalBankBalanceStr));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
+        });
+
+        /*refUid=mAuth.getCurrentUser().getUid();
+        reflectref=FirebaseDatabase.getInstance().getReference().child("Savings Amount").child(refUid);
+
+        savings=(TextView)findViewById(R.id.savingsref);
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
+                    savings.setText(savingsup);
+                    totalBankBalance.setText(savingsup);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
         });
 
 
+        refUid=mAuth.getCurrentUser().getUid();
+        reflectref=FirebaseDatabase.getInstance().getReference().child("Google Amount").child(refUid);
+        google=(TextView)findViewById(R.id.googleref);
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
+                    google.setText(googleup);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
+        });
 
 
+        refUid=mAuth.getCurrentUser().getUid();
+        reflectref=FirebaseDatabase.getInstance().getReference().child("Paytm Amount").child(refUid);
+        paytmre=(TextView)findViewById(R.id.paytmref);
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
+                    paytmre.setText(paytmup);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
+        });
+
+
+        refUid=mAuth.getCurrentUser().getUid();
+        reflectref=FirebaseDatabase.getInstance().getReference().child("PhonePe Amount").child(refUid);
+        phonepe=(TextView)findViewById(R.id.phoneperef);
+        reflectref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
+                    phonepe.setText(phonepeup);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+            }
+        });*/
+
+        //totalBankBalanceStr = googleup + paytmup + phonepeup + savingsup + bankup;
+
+        //totalBankBalance.setText(googleup,paytmup,phonepeup,savingsup,bankup);
 
     }
 
-
-
-
     private void showpay()
     {
-
-     dialogframe.setContentView(R.layout.custom_add_popup);
-
-      closeimg=(ImageView)dialogframe.findViewById(R.id.close);
-
-      closeimg.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
+        dialogframe.setContentView(R.layout.custom_add_popup);
+        closeimg=(ImageView)dialogframe.findViewById(R.id.close);
+        closeimg.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+          public void onClick(View v)
+          {
               dialogframe.dismiss();
           }
       });
 
         paypal=(ImageView) dialogframe.findViewById(R.id.paypal);
-
-        paypal.setOnClickListener(new View.OnClickListener() {
+        paypal.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this,SavingsActivity.class));
-
             }
         });
 
         paytm=(ImageView) dialogframe.findViewById(R.id.paytm);
-
-        paytm.setOnClickListener(new View.OnClickListener() {
+        paytm.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this,PaytmActivity.class));
-
             }
         });
 
         visa=(ImageView) dialogframe.findViewById(R.id.visa);
-
-        visa.setOnClickListener(new View.OnClickListener() {
+        visa.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this,BankActivity.class));
-
             }
         });
 
         phonepay=(ImageView) dialogframe.findViewById(R.id.phonepay);
-
-        phonepay.setOnClickListener(new View.OnClickListener() {
+        phonepay.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this,PhonePayActivity.class));
-
             }
         });
 
         gpay=(ImageView) dialogframe.findViewById(R.id.googlepay);
-
-        gpay.setOnClickListener(new View.OnClickListener() {
+        gpay.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this,GoogleActivity.class));
-
             }
         });
 
-
-     dialogframe.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-     dialogframe.show();
-
-
-
-
+        dialogframe.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogframe.show();
     }
-
-
 }

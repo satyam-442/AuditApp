@@ -2,14 +2,15 @@ package com.example.auditapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,8 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class BankActivity extends AppCompatActivity {
-
+public class BankActivity extends AppCompatActivity
+{
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
     private DatabaseReference mUserDatabase;
@@ -29,17 +30,21 @@ public class BankActivity extends AppCompatActivity {
 
     private EditText bankamt;
     private Button bnkupdate;
-
+    String currentUserId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank);
 
         mAuth = FirebaseAuth.getInstance();
 
-        ProgressDialog loadingbar = new ProgressDialog(this);
+        currentUserId = mAuth.getCurrentUser().getUid();
 
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("MySavings").child(currentUserId);
+
+        loadingBar = new ProgressDialog(this);
 
         bankamt = (EditText) findViewById(R.id.bankamount);
         bnkupdate = (Button) findViewById(R.id.bankamountbtn);
@@ -60,16 +65,14 @@ public class BankActivity extends AppCompatActivity {
             Toast.makeText(this, "Amount is Mandatory...", Toast.LENGTH_SHORT).show();
         } else {
 
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            /*FirebaseUser firebaseUser = mAuth.getCurrentUser();
             String ClientID = firebaseUser.getUid();
+            mUserDatabase = FirebaseDatabase.getInstance().getReference("Bank Amount").child(ClientID);*/
 
-            mUserDatabase = FirebaseDatabase.getInstance().getReference("Bank Amount").child(ClientID);
-
-
-            HashMap<String, String> ClientMap = new HashMap();
+            HashMap<String, Object> ClientMap = new HashMap();
             ClientMap.put("Bank Amount", bnk);
 
-            mUserDatabase.setValue(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
+            mUserDatabase.updateChildren(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
             {
                 @Override
                 public void onComplete(@NonNull Task<Void> task)

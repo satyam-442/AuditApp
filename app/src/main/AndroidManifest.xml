@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExpenseActivity"></activity>
+        <activity android:name=".RegisterEmailActivity"></activity>
+        <activity android:name=".LoginEmailActivity" >
+        </activity>
+        <activity android:name=".ExpenseActivity" />
         <activity android:name=".GoogleActivity" />
         <activity android:name=".PhonePayActivity" />
         <activity android:name=".BankActivity" />
@@ -19,11 +22,6 @@
         <activity android:name=".Dashboard" />
         <activity android:name=".ProfileReg" />
         <activity android:name=".Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

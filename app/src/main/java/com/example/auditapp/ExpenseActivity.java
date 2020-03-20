@@ -2,14 +2,15 @@ package com.example.auditapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,9 +47,11 @@ public class ExpenseActivity extends AppCompatActivity {
 
         exupdate = (Button) findViewById(R.id.expenseamountbtn);
 
-        exupdate.setOnClickListener(new View.OnClickListener() {
+        exupdate.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 expenseupdate();
             }
         });
@@ -58,9 +61,9 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
         final String eex = entex.getText().toString();
-        final String foex = entex.getText().toString();
-        final String coex = entex.getText().toString();
-        final String bex = entex.getText().toString();
+        final String foex = fex.getText().toString();
+        final String coex = cthex.getText().toString();
+        final String bex = bilex.getText().toString();
 
 
         if (TextUtils.isEmpty(eex)) {

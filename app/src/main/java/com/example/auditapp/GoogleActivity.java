@@ -2,14 +2,15 @@ package com.example.auditapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,7 @@ public class GoogleActivity extends AppCompatActivity {
 
     private EditText googleamt;
     private Button gogupdate;
+    String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class GoogleActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+        currentUserId = mAuth.getCurrentUser().getUid();
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("MySavings").child(currentUserId);
 
         googleamt=(EditText)findViewById(R.id.googleamount);
         gogupdate=(Button)findViewById(R.id.googleamountbtn);
@@ -58,15 +62,14 @@ public class GoogleActivity extends AppCompatActivity {
         }
         else {
 
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            /*FirebaseUser firebaseUser = mAuth.getCurrentUser();
             String ClientID = firebaseUser.getUid();
+            mUserDatabase = FirebaseDatabase.getInstance().getReference("Google Amount").child(ClientID);*/
 
-            mUserDatabase = FirebaseDatabase.getInstance().getReference("Google Amount").child(ClientID);
-
-            HashMap<String, String> ClientMap = new HashMap();
+            HashMap<String, Object> ClientMap = new HashMap();
             ClientMap.put("Google Amount", goamt);
 
-            mUserDatabase.setValue(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
+            mUserDatabase.updateChildren(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
             {
                 @Override
                 public void onComplete(@NonNull Task<Void> task)

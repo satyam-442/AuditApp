@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,6 +11,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,10 +39,9 @@ import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileReg extends AppCompatActivity {
-
+public class ProfileReg extends AppCompatActivity
+{
     private CircleImageView SetUserImage;
-
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
     private DatabaseReference mUserDatabase;
@@ -71,16 +71,15 @@ public class ProfileReg extends AppCompatActivity {
 
         register = (Button) findViewById(R.id.reg_button);
 
-        SetUserImage.setOnClickListener(new View.OnClickListener() {
+        SetUserImage.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                 Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
-
-
             }
         });
 
@@ -100,9 +99,11 @@ public class ProfileReg extends AppCompatActivity {
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
         mUserDatabase.keepSynced(true);
 
-        mUserDatabase.addValueEventListener(new ValueEventListener() {
+        /*mUserDatabase.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
                final String image = dataSnapshot.child("image").getValue().toString();
                 if(!image.equals("default"))
                 {
@@ -128,43 +129,29 @@ public class ProfileReg extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
-
-
-
-
+        });*/
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
-
-
     }
-
-
-
-
-
-
-
-    private void RegUser() {
-
+    private void RegUser()
+    {
         final String name = Name.getText().toString();
         final String contact = Phone.getText().toString();
-
-        if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(name))
+        {
             Toast.makeText(this, "Enter The Name", Toast.LENGTH_SHORT).show();
         }
-        if (TextUtils.isEmpty(contact)) {
+
+        if (TextUtils.isEmpty(contact))
+        {
             Toast.makeText(this, "Enter The Phone number", Toast.LENGTH_SHORT).show();
         }
         else
             {
-
             loadingBar.setTitle("Sign Up Status");
             loadingBar.setMessage("please wait");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
-
-
 
                 HashMap<String, String> shopMap = new HashMap();
                 shopMap.put("Name", name);
@@ -199,7 +186,7 @@ public class ProfileReg extends AppCompatActivity {
         finish();
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -214,9 +201,9 @@ public class ProfileReg extends AppCompatActivity {
                 uploadImage();
             }
         }
-    }
+    }*/
 
-    private void uploadImage() {
+    /*private void uploadImage() {
         loadingBar.setMessage("Uploading");
         loadingBar.show();
         if (imageUri != null)
@@ -280,7 +267,7 @@ public class ProfileReg extends AppCompatActivity {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getMimeTypeFromExtension(contentResolver.getType(uri));
-    }
+    }*/
 
 
 }
