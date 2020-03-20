@@ -8,6 +8,7 @@ import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class Dashboard extends AppCompatActivity
     private FirebaseUser mCurrentUser;
     private String refUid, googleup, bankup, savingsup, phonepeup, paytmup;
     int totalBankBalanceStr = 0;
+    Button checkBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +57,14 @@ public class Dashboard extends AppCompatActivity
 
         mSavingAccountRef = FirebaseDatabase.getInstance().getReference().child("MySavings").child(refUid);
 
+        checkBalance = (Button) findViewById(R.id.checkBalance);
+        checkBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Dashboard.this, CheckBalanceActivity.class));
+            }
+        });
+
         bank = (TextView) findViewById(R.id.bankref);
         savings = (TextView) findViewById(R.id.savingsref);
         phonepe = (TextView) findViewById(R.id.phoneperef);
@@ -63,7 +73,7 @@ public class Dashboard extends AppCompatActivity
 
         totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
 
-        SowBalanceInBank();
+        //SowBalanceInBank();
 
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
@@ -122,7 +132,7 @@ public class Dashboard extends AppCompatActivity
         });
     }
 
-    private void SowBalanceInBank() {
+    /*private void SowBalanceInBank() {
         //bank=(TextView)findViewById(R.id.bankref);
         mSavingAccountRef.addValueEventListener(new ValueEventListener()
         {
@@ -159,7 +169,7 @@ public class Dashboard extends AppCompatActivity
 
         //totalBankBalance.setText(googleup,paytmup,phonepeup,savingsup,bankup);
 
-    }
+    }*/
 
     private void showpay()
     {
