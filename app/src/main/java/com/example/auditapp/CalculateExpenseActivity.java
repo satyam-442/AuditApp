@@ -51,6 +51,22 @@ public class CalculateExpenseActivity extends AppCompatActivity
         bankValue = (TextView) findViewById(R.id.bankBalance);
         netValue = (TextView) findViewById(R.id.leftBalance);
 
+        mUserDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String mainbal = dataSnapshot.child("Net Saving").getValue().toString();
+
+                netValue.setText(mainbal);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         calculateExp = (Button) findViewById(R.id.calculateExp);
         calculateExp.setOnClickListener(new View.OnClickListener() {
             @Override

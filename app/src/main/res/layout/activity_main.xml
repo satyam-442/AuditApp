@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,56 +8,62 @@
     android:background="@drawable/splash"
     android:orientation="horizontal">
 
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="200dp"
+        android:layout_marginLeft="30dp"
+        android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="131dp"
-        android:layout_height="145dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="240dp"
-        android:layout_marginBottom="546dp"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/logo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Audit"
+            android:textColor="#000000"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="-350dp">
 
     <TextView
+        android:textSize="20dp"
         android:id="@+id/textView"
-        android:layout_width="267dp"
-        android:layout_height="63dp"
-        android:layout_below="@id/imageView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginEnd="79dp"
-        android:layout_marginBottom="507dp"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Better Control to Your Finances" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="198dp"
-        android:layout_height="96dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="152dp"
-        android:layout_marginTop="61dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="574dp"
-        android:text="Audit"
-        android:textColor="#000000"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+    </LinearLayout>
 
 
-</RelativeLayout>
+
+</LinearLayout>
 
 
 

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -33,15 +34,17 @@ public class Dashboard extends AppCompatActivity
     Dialog dialogframe;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mUserDatabase,reflectref, mSavingAccountRef;
+    private DatabaseReference mUserDatabase,reflectref, mSavingAccountRef,netsavings;
     private CircleImageView SetImage;
     private ImageView add,closeimg,paypal,paytm,visa,phonepay,gpay,sub;
-    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance;
+    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance,mainbalance;
     private ProgressDialog loadingBar;
     private FirebaseUser mCurrentUser;
     private String refUid, googleup, bankup, savingsup, phonepeup, paytmup;
     int totalBankBalanceStr = 0;
+    TextView ownnername;
     Button checkBalance;
+    ImageView logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,9 +52,24 @@ public class Dashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        TextView t = (TextView) findViewById(R.id.quotetext);
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "fonts/Sony_Sketch_EF.ttf");
+        t.setTypeface(myCustomFont);//font style
+
         dialogframe=new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
 
+        logout=(ImageView)findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent intent=new Intent(Dashboard.this,LoginEmailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ownnername=(TextView)findViewById(R.id.accountownername);
         refUid = mAuth.getCurrentUser().getUid();
         reflectref=FirebaseDatabase.getInstance().getReference().child("Bank Amount").child(refUid);
 
@@ -71,10 +89,13 @@ public class Dashboard extends AppCompatActivity
         paytmre = (TextView) findViewById(R.id.paytmref);
         google = (TextView) findViewById(R.id.googleref);
 
+        mainbalance=(TextView)findViewById(R.id.mainbalance);
+
         totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
 
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
+        netsavings=FirebaseDatabase.getInstance().getReference("NetSavings").child(currentUserID);
         SetImage=(CircleImageView)findViewById(R.id.main_profile);
 
         sub=(ImageView)findViewById(R.id.sub);
@@ -88,32 +109,51 @@ public class Dashboard extends AppCompatActivity
             }
         });
 
+
+        netsavings.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String mainbal = dataSnapshot.child("Net Saving").getValue().toString();
+
+                mainbalance.setText(mainbal);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         mUserDatabase.addValueEventListener(new ValueEventListener()
         {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                final String image = dataSnapshot.child("image").getValue().toString();
-                if(!image.equals("default"))
-                {
-                    Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
-                    Picasso.with(Dashboard.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.profiles).into(SetImage, new Callback()
-                    {
-                        @Override
-                        public void onSuccess()
-                        {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        }
+                if (dataSnapshot.exists()) {
+                    String userfullname = dataSnapshot.child("Name").getValue().toString();
 
-                        @Override
-                        public void onError()
-                        {
-                            Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
-                        }
-                    });
+                    ownnername.setText(userfullname);
+
+                    final String image = dataSnapshot.child("image").getValue().toString();
+                    if (!image.equals("default")) {
+                        Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
+                        Picasso.with(Dashboard.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.profiles).into(SetImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError() {
+                                Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
+                            }
+                        });
+                    }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             { }
