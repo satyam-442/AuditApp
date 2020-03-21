@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".CalculateExpenseActivity"
     android:background="@drawable/login">
-<!--THIS IS DEMO-->
+<!--THIS IS DEMOa-->
     <LinearLayout
         android:id="@+id/bankBalanceLay"
         android:layout_width="match_parent"
