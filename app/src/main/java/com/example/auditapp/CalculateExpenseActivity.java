@@ -13,21 +13,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class CheckBalanceActivity extends AppCompatActivity
+public class CalculateExpenseActivity extends AppCompatActivity
 {
+
     DatabaseReference mSavingAccountRef,mExpenseRef;
     String currentUserId;
     FirebaseAuth mAuth;
     int totalBankBalanceStr = 0;
     int totalExpenseStr = 0;
-    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance;
+    TextView expenseValue,bankValue;
     private String refUid, googleup, bankup, savingsup, phonepeup, paytmup;
     private String billup, clothup, entertainup, foodup;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_balance);
+        setContentView(R.layout.activity_calculate_expense);
 
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
@@ -35,18 +37,14 @@ public class CheckBalanceActivity extends AppCompatActivity
         mSavingAccountRef = FirebaseDatabase.getInstance().getReference().child("MySavings").child(currentUserId);
         mExpenseRef = FirebaseDatabase.getInstance().getReference().child("MySavings").child(currentUserId).child("Expenses");
 
-        SowBalanceInBank();
+        expenseValue = (TextView) findViewById(R.id.expenseBalance);
+        bankValue = (TextView) findViewById(R.id.bankBalance);
 
-        bank = (TextView) findViewById(R.id.bankref);
-        savings = (TextView) findViewById(R.id.savingsref);
-        phonepe = (TextView) findViewById(R.id.phoneperef);
-        paytmre = (TextView) findViewById(R.id.paytmref);
-        google = (TextView) findViewById(R.id.googleref);
-
-        totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
+        SowBalanceBankTotal();
+        SowBalanceExpenseTotal();
     }
 
-    private void SowBalanceInBank()
+    private void SowBalanceBankTotal()
     {
         //bank=(TextView)findViewById(R.id.bankref);
         mSavingAccountRef.addValueEventListener(new ValueEventListener()
@@ -61,25 +59,50 @@ public class CheckBalanceActivity extends AppCompatActivity
                     paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
                     phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
                     savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
-                    bank.setText(bankup);
-                    google.setText(googleup);
-                    paytmre.setText(paytmup);
-                    phonepe.setText(phonepeup);
-                    savings.setText(savingsup);
 
                     int totalBankBalanceInt = ((Integer.valueOf(bankup)) + (Integer.valueOf(googleup)) + (Integer.valueOf(paytmup)) + (Integer.valueOf(phonepeup)) + (Integer.valueOf(savingsup)));
                     totalBankBalanceStr = totalBankBalanceStr + totalBankBalanceInt;
 
                     //THIS THE LOGIC TO SUM-UP THE TOTAL SAVINGS AMOUNT
-                    totalBankBalance.setText(String.valueOf(totalBankBalanceStr));
+                    bankValue.setText(String.valueOf(totalBankBalanceStr));
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             { }
         });
+    }
 
+    private void SowBalanceExpenseTotal()
+    {
+        mExpenseRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    billup = dataSnapshot.child("Bill Expense").getValue().toString();
+                    clothup = dataSnapshot.child("Cloth Expense").getValue().toString();
+                    entertainup = dataSnapshot.child("Entertainment Expense").getValue().toString();
+                    foodup = dataSnapshot.child("Food Expense").getValue().toString();
+                    /*savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
+                    bank.setText(bankup);
+                    google.setText(googleup);
+                    paytmre.setText(paytmup);
+                    phonepe.setText(phonepeup);
+                    savings.setText(savingsup);*/
 
+                    int totalExpenseInt = ((Integer.valueOf(billup)) + (Integer.valueOf(clothup)) + (Integer.valueOf(entertainup)) + (Integer.valueOf(foodup)));
+                    totalExpenseStr = totalExpenseStr + totalExpenseInt;
 
+                    //THIS THE LOGIC TO SUM-UP THE TOTAL SAVINGS AMOUNT
+                    expenseValue.setText(String.valueOf(totalExpenseStr));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
+        });
     }
 }

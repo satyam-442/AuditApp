@@ -27,17 +27,30 @@ public class ExpenseActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
+    String ClientID;
 
     private EditText entex,fex,cthex,bilex;
-    private Button exupdate;
+    private Button exupdate, checkExpenseBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        ClientID = firebaseUser.getUid();
 
+        checkExpenseBtn = (Button) findViewById(R.id.checkExpenses);
+        checkExpenseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendToCalculateExpense();
+            }
+        });
+
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("MySavings").child(ClientID).child("Expenses");
         ProgressDialog loadingbar = new ProgressDialog(this);
 
         entex = (EditText) findViewById(R.id.entertainex);
@@ -56,6 +69,13 @@ public class ExpenseActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void SendToCalculateExpense() {
+        Intent calculate = new Intent(ExpenseActivity.this,CalculateExpenseActivity.class);
+        startActivity(calculate);
+    }
+
+
 
     private void expenseupdate() {
 
@@ -86,18 +106,11 @@ public class ExpenseActivity extends AppCompatActivity {
         }
         else {
 
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            String ClientID = firebaseUser.getUid();
-
-            mUserDatabase = FirebaseDatabase.getInstance().getReference("Expenses").child(ClientID);
-
-
             HashMap<String, String> ClientMap = new HashMap();
             ClientMap.put("Entertainment Expense", eex);
             ClientMap.put("Food Expense", foex);
             ClientMap.put("Cloth Expense", coex);
             ClientMap.put("Bill Expense", bex);
-
             mUserDatabase.setValue(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
             {
                 @Override
@@ -105,11 +118,12 @@ public class ExpenseActivity extends AppCompatActivity {
                 {
                     if (task.isSuccessful())
                     {
-                        Intent DashMainIntent = new Intent(ExpenseActivity.this,Dashboard.class);
+                        /*Intent DashMainIntent = new Intent(ExpenseActivity.this,CheckBalanceActivity.class);
+                        //DashMainIntent.putExtra("Total Expenses",String.valueOf());
                         DashMainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(DashMainIntent);
+                        startActivity(DashMainIntent);*/
                         Toast.makeText(ExpenseActivity.this, "Updated Successfully...", Toast.LENGTH_SHORT).show();
-                        finish();
+                        ///finish();
                     }
                     else
                     {
@@ -118,11 +132,6 @@ public class ExpenseActivity extends AppCompatActivity {
                     }
                 }
             });
-
-
-
         }
-
-
     }
 }

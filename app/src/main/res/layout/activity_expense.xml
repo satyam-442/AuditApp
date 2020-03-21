@@ -161,4 +161,27 @@
         app:layout_constraintVertical_bias="0.606">
 
     </Button>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Calculate your Expenses!"
+            android:textColor="#fff"
+            android:textSize="18dp"/>
+
+        <Button
+            android:id="@+id/checkExpenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Click!"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
