@@ -101,9 +101,7 @@ public class Dashboard extends AppCompatActivity
                     {
                         @Override
                         public void onSuccess()
-                        {
-
-                        }
+                        { }
 
                         @Override
                         public void onError()
