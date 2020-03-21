@@ -77,26 +77,23 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
 
-    private void expenseupdate() {
-
-
+    private void expenseupdate()
+    {
         final String eex = entex.getText().toString();
         final String foex = fex.getText().toString();
         final String coex = cthex.getText().toString();
         final String bex = bilex.getText().toString();
 
-
-        if (TextUtils.isEmpty(eex)) {
+        if (TextUtils.isEmpty(eex))
+        {
             Toast.makeText(this, " Entertainmrnt Amount is Mandatory...", Toast.LENGTH_SHORT).show();
         }
         else if (TextUtils.isEmpty(foex))
         {
-
             Toast.makeText(this, " Food Amount is Mandatory...", Toast.LENGTH_SHORT).show();
         }
         else if (TextUtils.isEmpty(coex))
         {
-
             Toast.makeText(this, " Cloth Amount is Mandatory...", Toast.LENGTH_SHORT).show();
         }
         else if (TextUtils.isEmpty(bex))
@@ -104,8 +101,8 @@ public class ExpenseActivity extends AppCompatActivity {
 
             Toast.makeText(this, " Bill Amount is Mandatory...", Toast.LENGTH_SHORT).show();
         }
-        else {
-
+        else
+        {
             HashMap<String, String> ClientMap = new HashMap();
             ClientMap.put("Entertainment Expense", eex);
             ClientMap.put("Food Expense", foex);
