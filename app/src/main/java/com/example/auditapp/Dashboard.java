@@ -73,8 +73,6 @@ public class Dashboard extends AppCompatActivity
 
         totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
 
-        //SowBalanceInBank();
-
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
         SetImage=(CircleImageView)findViewById(R.id.main_profile);
@@ -95,7 +93,7 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                /*final String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 if(!image.equals("default"))
                 {
                     Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
@@ -113,7 +111,7 @@ public class Dashboard extends AppCompatActivity
                             Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
                         }
                     });
-                }*/
+                }
             }
 
             @Override
@@ -131,45 +129,6 @@ public class Dashboard extends AppCompatActivity
             }
         });
     }
-
-    /*private void SowBalanceInBank() {
-        //bank=(TextView)findViewById(R.id.bankref);
-        mSavingAccountRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    bankup = dataSnapshot.child("Bank Amount").getValue().toString();
-                    googleup = dataSnapshot.child("Google Amount").getValue().toString();
-                    paytmup = dataSnapshot.child("Paytm Amount").getValue().toString();
-                    phonepeup = dataSnapshot.child("PhonePe Amount").getValue().toString();
-                    savingsup = dataSnapshot.child("Savings Amount").getValue().toString();
-                    bank.setText(bankup);
-                    google.setText(googleup);
-                    paytmre.setText(paytmup);
-                    phonepe.setText(phonepeup);
-                    savings.setText(savingsup);
-
-                    //totalBankBalanceStr = bankup + googleup + paytmup + phonepeup + savingsup;
-                    int totalBankBalanceInt = ((Integer.valueOf(bankup)) + (Integer.valueOf(googleup)) + (Integer.valueOf(paytmup)) + (Integer.valueOf(phonepeup)) + (Integer.valueOf(savingsup)));
-                    totalBankBalanceStr = totalBankBalanceStr + totalBankBalanceInt;
-
-                    //THIS THE LOGIC TO SUM-UP THE TOTAL SAVINGS AMOUNT
-                    totalBankBalance.setText(String.valueOf(totalBankBalanceStr));
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            { }
-        });
-
-        //totalBankBalanceStr = googleup + paytmup + phonepeup + savingsup + bankup;
-
-        //totalBankBalance.setText(googleup,paytmup,phonepeup,savingsup,bankup);
-
-    }*/
 
     private void showpay()
     {
