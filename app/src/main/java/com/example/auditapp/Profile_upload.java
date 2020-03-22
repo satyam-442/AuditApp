@@ -43,10 +43,11 @@ public class Profile_upload extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
-    private DatabaseReference mUserDatabase;
-    private  Button dashbutton;
+    String userId;
+    private DatabaseReference mUserDatabase,mUserDB;
 
     private static final int GALLERY_PICK = 1;
+    private Button dashbutton;
 
     // Storage Firebase
     private StorageReference mImageStorage;
@@ -63,10 +64,37 @@ public class Profile_upload extends AppCompatActivity
         UploadUserImage = (CircleImageView) findViewById(R.id.profile_photo_two);
         dashbutton=(Button)findViewById(R.id.dash_button);
 
+        userId = mAuth.getCurrentUser().getUid();
+        mUserDB = FirebaseDatabase.getInstance().getReference().child("NetSavings").child(userId);
+
         dashbutton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Profile_upload.this,Dashboard.class));
+            public void onClick(View v)
+            {
+                HashMap<String, String> ClientMap = new HashMap();
+                ClientMap.put("Net Saving", "0");
+                mUserDB.setValue(ClientMap).addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                        /*Intent DashMainIntent = new Intent(ExpenseActivity.this,CheckBalanceActivity.class);
+                        //DashMainIntent.putExtra("Total Expenses",String.valueOf());
+                        DashMainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(DashMainIntent);*/
+                            Toast.makeText(Profile_upload.this, "Updated Successfully...", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Profile_upload.this,Dashboard.class));
+                            finish();
+                        }
+                        else
+                        {
+                            String message = task.getException().getMessage();
+                            Toast.makeText(Profile_upload.this, "Error Occurred ;" + message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 
@@ -80,11 +108,8 @@ public class Profile_upload extends AppCompatActivity
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
-
-
             }
         });
-
 
         loadingBar = new ProgressDialog(this);
 
@@ -103,9 +128,7 @@ public class Profile_upload extends AppCompatActivity
                     {
                         @Override
                         public void onSuccess()
-                        {
-
-                        }
+                        { }
 
                         @Override
                         public void onError()
@@ -117,18 +140,9 @@ public class Profile_upload extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-
-
-
-
-
         mImageStorage = FirebaseStorage.getInstance().getReference();
-
-
     }
 
     @Override

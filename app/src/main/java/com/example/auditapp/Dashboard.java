@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -33,10 +34,10 @@ public class Dashboard extends AppCompatActivity
     Dialog dialogframe;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mUserDatabase,reflectref, mSavingAccountRef;
+    private DatabaseReference mUserDatabase,reflectref, mSavingAccountRef,mUserDB;
     private CircleImageView SetImage;
     private ImageView add,closeimg,paypal,paytm,visa,phonepay,gpay,sub;
-    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance;
+    private TextView google,paytmre,phonepe,savings,bank,totalBankBalance,accName,qouteText;
     private ProgressDialog loadingBar;
     private FirebaseUser mCurrentUser;
     private String refUid, googleup, bankup, savingsup, phonepeup, paytmup;
@@ -57,10 +58,20 @@ public class Dashboard extends AppCompatActivity
 
         mSavingAccountRef = FirebaseDatabase.getInstance().getReference().child("MySavings").child(refUid);
 
+        totalBankBalance = (TextView) findViewById(R.id.mainbalance);
+        mUserDB = FirebaseDatabase.getInstance().getReference().child("NetSavings").child(refUid);
+
+        accName = (TextView) findViewById(R.id.accountownername);
+        qouteText = (TextView) findViewById(R.id.quotetext);
+        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/Sony_Sketch_EF.ttf");
+        qouteText.setTypeface(typeface);
+
         checkBalance = (Button) findViewById(R.id.checkBalance);
-        checkBalance.setOnClickListener(new View.OnClickListener() {
+        checkBalance.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(Dashboard.this, CheckBalanceActivity.class));
             }
         });
@@ -71,7 +82,7 @@ public class Dashboard extends AppCompatActivity
         paytmre = (TextView) findViewById(R.id.paytmref);
         google = (TextView) findViewById(R.id.googleref);
 
-        totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
+        //totalBankBalance = (TextView) findViewById(R.id.totalBankBalance);
 
         String currentUserID = mAuth.getCurrentUser().getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
@@ -94,6 +105,10 @@ public class Dashboard extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
                 final String image = dataSnapshot.child("image").getValue().toString();
+                final String name = dataSnapshot.child("Name").getValue().toString();
+
+                accName.setText(name);
+
                 if(!image.equals("default"))
                 {
                     Picasso.with(Dashboard.this).load(image).placeholder(R.drawable.profiles).into(SetImage);
@@ -112,6 +127,21 @@ public class Dashboard extends AppCompatActivity
                         }
                     });
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            { }
+        });
+
+
+        mUserDB.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                final String belnameBal = dataSnapshot.child("Net Saving").getValue().toString();
+                totalBankBalance.setText(belnameBal);
             }
 
             @Override
@@ -195,5 +225,11 @@ public class Dashboard extends AppCompatActivity
 
         dialogframe.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogframe.show();
+    }
+
+    public void clientLogout(View view) {
+        mAuth.signOut();
+        startActivity(new Intent(this,Dashboard.class));
+        finish();
     }
 }
